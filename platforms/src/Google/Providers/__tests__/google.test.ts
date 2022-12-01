@@ -29,6 +29,7 @@ describe("Attempt verification", function () {
       });
 
     const verifiedPayload = await googleProvider.verify({
+      address: "0x0",
       proofs: {
         code: MOCK_TOKEN_ID,
       },
@@ -57,6 +58,7 @@ describe("Attempt verification", function () {
       });
 
     const verifiedPayload = await googleProvider.verify({
+      address: "0x0",
       proofs: {
         code: MOCK_TOKEN_ID,
       },
@@ -68,27 +70,6 @@ describe("Attempt verification", function () {
       record: {
         email: MOCK_EMAIL,
       },
-    });
-  });
-
-  it("should return invalid payload when verifyGoogle throws exception", async () => {
-    const googleProvider = new google.GoogleProvider();
-    const verifyGoogleMock = jest
-      .spyOn(google, "verifyGoogle")
-      .mockImplementation((code: string): Promise<google.UserInfo> => {
-        throw new Error("verifyGoogle error message");
-      });
-
-    const verifiedPayload = await googleProvider.verify({
-      proofs: {
-        code: MOCK_TOKEN_ID,
-      },
-    } as unknown as RequestPayload);
-
-    expect(verifyGoogleMock).toBeCalledWith(MOCK_TOKEN_ID);
-    expect(verifiedPayload).toEqual({
-      valid: false,
-      error: ["verifyGoogle error message"],
     });
   });
 });
@@ -143,10 +124,16 @@ describe("verifyGoogle", function () {
       throw { response: { data: { error: { message: "error message for user data request" } } } };
     });
 
-    async function verifyGoogle() {
-      await google.verifyGoogle(MOCK_TOKEN_ID);
-    }
-    await expect(verifyGoogle).rejects.toThrow(new Error("Error getting user info: error message for user data request"));
+    const verifiedGoogleResponse = await google.verifyGoogle(MOCK_TOKEN_ID);
+
+    expect(verifiedGoogleResponse).toEqual({
+      errors: [
+        "Error getting user info",
+        "undefined",
+        "Status undefined: undefined",
+        "Details: " + JSON.stringify({ error: { message: "error message for user data request" } }),
+      ],
+    });
     expect(requestAccessTokenMock).toBeCalledWith(MOCK_TOKEN_ID);
     expect(userInfoMock).toBeCalledTimes(1);
     expect(userInfoMock).toBeCalledWith("https://www.googleapis.com/oauth2/v2/userinfo", {
@@ -159,10 +146,10 @@ describe("verifyGoogle", function () {
       throw new Error("ERROR");
     });
 
-    async function verifyGoogle() {
-      await google.verifyGoogle(MOCK_TOKEN_ID);
-    }
+    const verifiedGoogleResponse = await google.verifyGoogle(MOCK_TOKEN_ID);
 
-    await expect(verifyGoogle).rejects.toThrow(new Error("ERROR"));
+    expect(verifiedGoogleResponse).toEqual({
+      errors: ["Error getting user info", "ERROR", "Status undefined: undefined", "Details: undefined"],
+    });
   });
 });

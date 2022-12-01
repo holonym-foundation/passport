@@ -47,6 +47,7 @@ describe("Attempt verification", function () {
     const github = new GithubProvider();
     const githubPayload = await github.verify(
       {
+        address: "0x0",
         proofs: {
           code,
         },
@@ -90,6 +91,7 @@ describe("Attempt verification", function () {
 
     const githubPayload = await github.verify(
       {
+        address: "0x0",
         proofs: {
           code,
         },
@@ -119,11 +121,12 @@ describe("Attempt verification", function () {
 
     const githubPayload = await github.verify(
       {
+        address: "0x0",
         proofs: {
           code,
-      },
-    } as unknown as RequestPayload,
-    {}
+        },
+      } as unknown as RequestPayload,
+      {}
     );
 
     expect(axios.post).toHaveBeenCalledTimes(1);
@@ -134,20 +137,19 @@ describe("Attempt verification", function () {
 
   it("should return invalid payload when a bad status code is returned by github user api", async () => {
     mockedAxios.get.mockImplementation(async (url, config) => {
-      return {
-        status: 500,
-      };
+      throw new Error("Some Error");
     });
 
     const github = new GithubProvider();
 
     const githubPayload = await github.verify(
       {
+        address: "0x0",
         proofs: {
           code,
         },
       } as unknown as RequestPayload,
-      {},
+      {}
     );
 
     expect(axios.post).toHaveBeenCalledTimes(1);
