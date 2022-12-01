@@ -34,21 +34,21 @@ describe("Attempt verification", function () {
       valid: true,
       record: {
         address: MOCK_ADDRESS,
-        holonym: `Is unique for action ${actionId}`,
+        holonym: `Is unique for action ${actionId}, based on government ID`,
       },
     });
   });
 
-  it("should return false for an address not proven uniqueness to Holonym government ID Sybil resistance smart contract", async () => {
+  it("should return false for an address that has not proven uniqueness to Holonym government ID Sybil resistance smart contract", async () => {
     mockIsUniqueForAction.mockResolvedValueOnce(false);
     const UNREGISTERED_ADDRESS = "0xUNREGISTERED";
 
     const holonym = new HolonymGovIdProvider();
     const verifiedPayload = await holonym.verify({
-      address: MOCK_ADDRESS,
+      address: UNREGISTERED_ADDRESS,
     } as RequestPayload);
 
-    expect(mockIsUniqueForAction).toBeCalledWith(UNREGISTERED_ADDRESS);
+    expect(mockIsUniqueForAction).toBeCalledWith(UNREGISTERED_ADDRESS, actionId);
     expect(verifiedPayload).toEqual({
       valid: false,
     });
@@ -60,10 +60,10 @@ describe("Attempt verification", function () {
 
     const holonym = new HolonymGovIdProvider();
     const verifiedPayload = await holonym.verify({
-      address: MOCK_ADDRESS,
+      address: UNREGISTERED_ADDRESS,
     } as RequestPayload);
 
-    expect(mockIsUniqueForAction).toBeCalledWith(UNREGISTERED_ADDRESS);
+    expect(mockIsUniqueForAction).toBeCalledWith(UNREGISTERED_ADDRESS, actionId);
     expect(verifiedPayload).toEqual({
       valid: false,
       error: [JSON.stringify("some error")],

@@ -1,6 +1,6 @@
 // ---- Test subject
 import { RequestPayload } from "@gitcoin/passport-types";
-import { HolonymGovIdProvider } from "../Providers/holonymGovIdProvider";
+import { HolonymPhoneNumProvider } from "../Providers/holonymPhoneNumProvider";
 
 const mockIsUniqueForAction = jest.fn();
 
@@ -24,7 +24,7 @@ describe("Attempt verification", function () {
 
   it("should return true for an address that has proven uniqueness to Holonym phone number Sybil resistance smart contract", async () => {
     mockIsUniqueForAction.mockResolvedValueOnce(true);
-    const holonym = new HolonymGovIdProvider();
+    const holonym = new HolonymPhoneNumProvider();
     const verifiedPayload = await holonym.verify({
       address: MOCK_ADDRESS,
     } as RequestPayload);
@@ -34,7 +34,7 @@ describe("Attempt verification", function () {
       valid: true,
       record: {
         address: MOCK_ADDRESS,
-        holonym: `Is unique for action ${actionId}`,
+        holonym: `Is unique for action ${actionId}, based on phone number`,
       },
     });
   });
@@ -43,12 +43,12 @@ describe("Attempt verification", function () {
     mockIsUniqueForAction.mockResolvedValueOnce(false);
     const UNREGISTERED_ADDRESS = "0xUNREGISTERED";
 
-    const holonym = new HolonymGovIdProvider();
+    const holonym = new HolonymPhoneNumProvider();
     const verifiedPayload = await holonym.verify({
-      address: MOCK_ADDRESS,
+      address: UNREGISTERED_ADDRESS,
     } as RequestPayload);
 
-    expect(mockIsUniqueForAction).toBeCalledWith(UNREGISTERED_ADDRESS);
+    expect(mockIsUniqueForAction).toBeCalledWith(UNREGISTERED_ADDRESS, actionId);
     expect(verifiedPayload).toEqual({
       valid: false,
     });
@@ -58,12 +58,12 @@ describe("Attempt verification", function () {
     mockIsUniqueForAction.mockRejectedValueOnce("some error");
     const UNREGISTERED_ADDRESS = "0xUNREGISTERED";
 
-    const holonym = new HolonymGovIdProvider();
+    const holonym = new HolonymPhoneNumProvider();
     const verifiedPayload = await holonym.verify({
-      address: MOCK_ADDRESS,
+      address: UNREGISTERED_ADDRESS,
     } as RequestPayload);
 
-    expect(mockIsUniqueForAction).toBeCalledWith(UNREGISTERED_ADDRESS);
+    expect(mockIsUniqueForAction).toBeCalledWith(UNREGISTERED_ADDRESS, actionId);
     expect(verifiedPayload).toEqual({
       valid: false,
       error: [JSON.stringify("some error")],
