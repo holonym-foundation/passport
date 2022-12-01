@@ -229,5 +229,6 @@ export type PROVIDER_ID =
   | "ZkSync"
   | "Lens"
   | "GnosisSafe"
+  | "Holonym"
   | "HolonymPhoneNumProvider"
   | "HolonymGovIdProvider";
