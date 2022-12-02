@@ -10,7 +10,7 @@ import { StaticJsonRpcProvider } from "@ethersproject/providers";
 import { getAddress } from "../../utils/signer";
 
 // set the network rpc url based on env
-export const RPC_URL = process.env.RPC_URL;
+export const RPC_URL = process.env.POLYGON_RPC_URL;
 
 const GOV_ID_SR_ADDRESS = ""; // TODO
 
@@ -32,7 +32,7 @@ const actionId = 123456789;
 
 export class HolonymGovIdProvider implements Provider {
   // Give the provider a type so that we can select it from a payload
-  type = "Holonym";
+  type = "HolonymGovIdProvider";
   // Options can be set here and/or via the constructor
   _options = {};
 
