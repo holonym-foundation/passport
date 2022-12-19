@@ -4,15 +4,14 @@ import type { RequestPayload, VerifiedPayload } from "@gitcoin/passport-types";
 
 // ----- Ethers library
 import { Contract } from "ethers";
-import { StaticJsonRpcProvider } from "@ethersproject/providers";
+import { AlchemyProvider } from "@ethersproject/providers";
 
 // ----- Credential verification
 import { getAddress } from "../../utils/signer";
 
-// set the network rpc url based on env
-export const RPC_URL = process.env.POLYGON_RPC_URL;
+export const ALCHEMY_API_KEY = process.env.ALCHEMY_API_KEY;
 
-const GOV_ID_SR_ADDRESS = ""; // TODO
+const GOV_ID_SR_ADDRESS = "0x3497556f7D0bF602D4237Ecb8ae92840D09E4f63";
 
 // ABI for Holonym Sybil resistance contract based on government ID
 const GOV_ID_SR_ABI = [
@@ -47,8 +46,8 @@ export class HolonymGovIdProvider implements Provider {
     const address = await getAddress(payload);
 
     try {
-      // define a provider using the rpc url
-      const provider: StaticJsonRpcProvider = new StaticJsonRpcProvider(RPC_URL);
+      // define a provider using the alchemy api key
+      const provider: AlchemyProvider = new AlchemyProvider("optimism", ALCHEMY_API_KEY);
 
       const contract = new Contract(GOV_ID_SR_ADDRESS, GOV_ID_SR_ABI, provider);
 

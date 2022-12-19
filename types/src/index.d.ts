@@ -230,5 +230,4 @@ export type PROVIDER_ID =
   | "Lens"
   | "GnosisSafe"
   | "Holonym"
-  | "HolonymPhoneNumProvider"
   | "HolonymGovIdProvider";

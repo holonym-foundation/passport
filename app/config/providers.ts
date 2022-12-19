@@ -1,7 +1,4 @@
-// TODO: Uncomment
-// import { PROVIDER_ID, PLATFORM_ID } from "@gitcoin/passport-types";
-
-import { PROVIDER_ID, PLATFORM_ID } from '../../types/src'
+import { PROVIDER_ID, PLATFORM_ID } from "@gitcoin/passport-types";
 
 export type ProviderSpec = {
   title: string;
@@ -295,15 +292,6 @@ export const STAMP_PROVIDERS: Readonly<Providers> = {
     {
       platformGroup: "Government ID",
       providers: [{ title: "Proven uniqueness using Holonym with government ID", name: "HolonymGovIdProvider" }],
-    },
-    {
-      platformGroup: "Snapshot Proposal Creator",
-      providers: [
-        {
-          title: "Proven uniqueness using Holonym with phone number",
-          name: "HolonymPhoneNumProvider",
-        },
-      ],
     },
   ],
 };

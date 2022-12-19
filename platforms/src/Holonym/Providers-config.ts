@@ -14,13 +14,4 @@ export const HolonymProviderConfig: PlatformGroupSpec[] = [
     platformGroup: "Government ID",
     providers: [{ title: "Proven uniqueness using Holonym with government ID", name: "HolonymGovIdProvider" }],
   },
-  {
-    platformGroup: "Phone number",
-    providers: [
-      {
-        title: "Proven uniqueness using Holonym with phone number",
-        name: "HolonymPhoneNumProvider",
-      },
-    ],
-  },
 ];

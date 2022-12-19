@@ -251,7 +251,6 @@ export const providers = new Providers([
   new ZkSync.ZkSyncProvider(),
   new GnosisSafe.GnosisSafeProvider(),
   new Holonym.HolonymGovIdProvider(),
-  new Holonym.HolonymPhoneNumProvider(),
 ]);
 
 // create the app and run on port
